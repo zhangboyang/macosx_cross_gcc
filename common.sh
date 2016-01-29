@@ -17,9 +17,10 @@ UTIL_SRC="${SRC}/util"
 TOOLCHAIN_SRC="${SRC}/toolchain"
 NATIVE_SRC="${TOOLCHAIN_SRC}/native"
 CROSS_SRC="${TOOLCHAIN_SRC}/cross"
-CROSS_SYSROOT="${PWD}/sysroot"
-
 QEMU_SRC="${SRC}/qemu"
+TINYLINUX_SRC="${SRC}/tinylinux"
+
+CROSS_SYSROOT="${PWD}/sysroot"
 
 GCC_NATIVE_PREFIX="${PWD}/gcc-native"
 GCC_CROSS_PREFIX="${PWD}/gcc-cross"
@@ -98,6 +99,13 @@ GLIB_URL="http://mirrors.ustc.edu.cn/gnome/sources/glib/`echo ${GLIB_VER} | sed 
 PIXMAN_URL="http://cairographics.org/releases/${PIXMAN_TARBALL}"
 QEMU_URL="http://wiki.qemu-project.org/download/${QEMU_TARBALL}"
 
+# tinylinux
+BUSYBOX_VER=busybox-1.24.1
+BASH_VER=bash-4.3.30
+BUSYBOX_TARBALL="${BUSYBOX_VER}.tar.bz2"
+BASH_TARBALL="${BASH_VER}.tar.gz"
+BUSYBOX_URL="http://busybox.net/downloads/${BUSYBOX_TARBALL}"
+BASH_URL="http://mirrors.ustc.edu.cn/gnu/bash/${BASH_TARBALL}"
 
 # functions
 
@@ -142,9 +150,13 @@ function standard_build()
 	./configure "--prefix=$2" $3 && make ${MAKE_FLAGS} && make install || fail "can't build in $1"
 }
 
-function export_toolchain_path()
+function export_native_gcc_path()
 {
 	export PATH="${GCC_NATIVE_PREFIX}/bin:${PATH}"
+}
+
+function export_cross_toolchain_path()
+{
 	export PATH="${GCC_CROSS_PREFIX}/bin:${PATH}"
 }
 
@@ -160,13 +172,29 @@ function export_lib_path()
 
 function gen_setpath_script()
 {
-	cat > "${PWD}/setpath.sh" << EOF
-#!/bin/bash
+	cat > "${PWD}/set_native_toolchain_path.sh" << EOF
+#!/bin/sh
 export PATH="${GCC_NATIVE_PREFIX}/bin:\${PATH}"
+EOF
+	cat > "${PWD}/set_cross_toolchain_path.sh" << EOF
+#!/bin/sh
 export PATH="${GCC_CROSS_PREFIX}/bin:\${PATH}"
+EOF
+	cat > "${PWD}/set_util_path.sh" << EOF
+#!/bin/sh
 export PATH="${UTIL_PREFIX}/bin:\${PATH}"
 EOF
-	chmod +x "${PWD}/setpath.sh"
+	chmod +x "${PWD}/set_native_toolchain_path.sh" "${PWD}/set_cross_toolchain_path.sh" "${PWD}/set_util_path.sh"
+}
+
+function save_path()
+{
+    SAVED_PATH="$PATH"
+}
+
+function restore_path()
+{
+    export PATH="${SAVED_PATH}"
 }
 
 set -o pipefail

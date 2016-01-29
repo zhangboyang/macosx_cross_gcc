@@ -2,10 +2,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/common.sh"
 
-# target
-TARGET=arm-unknown-linux-gnueabi
-LINUX_ARCH=arm
-
 function build_native_gettext()
 {
 	chdir_to "${NATIVE_SRC}/${GETTEXT_VER}"
@@ -172,7 +168,8 @@ ulimit -n 1024
 unpack_source
 
 # set PATH
-export_toolchain_path
+export_native_gcc_path
+export_cross_toolchain_path
 export_util_path
 
 # build native tools

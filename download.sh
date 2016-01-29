@@ -38,11 +38,18 @@ function download_qemu_files()
     #download_file "${GETTEXT_URL}"
 }
 
+# tinylinux
+function download_tinylinux_files()
+{
+    download_file_by_curl "${BUSYBOX_URL}"
+    download_file "${BASH_URL}"
+}
 
 export_util_path
 download_util_files
 download_toolchain_files
 download_qemu_files
+download_tinylinux_files
 
 exit 0
 
