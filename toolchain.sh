@@ -102,7 +102,10 @@ function build_cross_glibc()
 {
 	chdir_to "${CROSS_SRC}/${GLIBC_VER}-build"
 	make distclean
-	BUILD_CC="gcc -lintl" "${CROSS_SRC}/${GLIBC_VER}/configure" \
+	local LIBINTL
+	LIBINTL="-lintl"
+	if [ "$OSTYPE" == "linux-gnu" ]; then LIBINTL=""; fi
+	BUILD_CC="gcc ${LIBINTL}" "${CROSS_SRC}/${GLIBC_VER}/configure" \
 		--prefix=/usr \
 		"--host=${TARGET}" \
 		"--with-headers=${CROSS_SYSROOT}/usr/include" \
@@ -170,7 +173,6 @@ unpack_source
 
 # set PATH
 export_path
-gen_setpath_script
 
 # build native tools
 build_native_part
