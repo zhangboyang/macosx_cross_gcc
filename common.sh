@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# target
+TARGET=arm-unknown-linux-gnueabi
+LINUX_ARCH=arm
+QEMU_TARGET_LIST=arm-softmmu
+
 # flags
 MAKE_FLAGS=-j8
 
