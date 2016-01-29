@@ -1,16 +1,8 @@
 #!/bin/bash
 
-# target
-TARGET=arm-unknown-linux-gnueabi
-LINUX_ARCH=arm
-QEMU_TARGET_LIST=arm-softmmu
-
-# flags
-MAKE_FLAGS=-j8
-
 # directory
-PWD=`pwd`
-SRC="${PWD}/src"
+PREFIX=`pwd`
+SRC="${PREFIX}/src"
 
 UTIL_SRC="${SRC}/util"
 
@@ -20,22 +12,19 @@ CROSS_SRC="${TOOLCHAIN_SRC}/cross"
 QEMU_SRC="${SRC}/qemu"
 TINYLINUX_SRC="${SRC}/tinylinux"
 
-CROSS_SYSROOT="${PWD}/sysroot"
+CROSS_SYSROOT="${PREFIX}/sysroot"
 
-GCC_NATIVE_PREFIX="${PWD}/gcc-native"
-GCC_CROSS_PREFIX="${PWD}/gcc-cross"
-UTIL_PREFIX="${PWD}/utils"
-LIB_PREFIX="${PWD}/libs"
+GCC_NATIVE_PREFIX="${PREFIX}/gcc-native"
+GCC_CROSS_PREFIX="${PREFIX}/gcc-cross"
+UTIL_PREFIX="${PREFIX}/utils"
+LIB_PREFIX="${PREFIX}/libs"
 
 
-# source
-
-# wget
+# source - wget
 WGET_VER=wget-1.17.1
 WGET_TARBALL="${WGET_VER}.tar.gz"
 WGET_URL="http://mirrors.ustc.edu.cn/gnu/wget/${WGET_TARBALL}"
-
-# util
+# source - util
 SED_VER=sed-4.2
 AWK_VER=gawk-4.1.3
 XZ_VER=xz-5.2.2
@@ -48,8 +37,7 @@ SED_URL="http://mirrors.ustc.edu.cn/gnu/sed/${SED_TARBALL}"
 AWK_URL="http://mirrors.ustc.edu.cn/gnu/gawk/${AWK_TARBALL}"
 XZ_URL="http://tukaani.org/xz/${XZ_TARBALL}"
 FINDUTILS_URL="http://mirrors.ustc.edu.cn/gnu/findutils/${FINDUTILS_TARBALL}"
-
-# toolchain
+# source - toolchain
 BINUTILS_VER=binutils-2.25
 GLIBC_VER=glibc-2.22
 GCC_VER=gcc-5.3.0
@@ -78,34 +66,41 @@ MPFR_URL="http://mirrors.ustc.edu.cn/gnu/mpfr/${MPFR_TARBALL}"
 ISL_URL="ftp://gcc.gnu.org/pub/gcc/infrastructure/${ISL_TARBALL}"
 LINUX_URL="http://mirrors.ustc.edu.cn/kernel.org/linux/kernel/${LINUX_MAJOR_VER}/${LINUX_TARBALL}"
 GETTEXT_URL="http://mirrors.ustc.edu.cn/gnu/gettext/${GETTEXT_TARBALL}"
-
-# qemu
+# source-qemu
 PKGCONFIGLITE_VER=pkg-config-lite-0.28-1
 LIBFFI_VER=libffi-3.2.1
-#GETTEXT_VER=gettext-0.19.7
 GLIB_VER=glib-2.47.5
 PIXMAN_VER=pixman-0.32.8
 QEMU_VER=qemu-2.5.0
 PKGCONFIGLITE_TARBALL="${PKGCONFIGLITE_VER}.tar.gz"
 LIBFFI_TARBALL="${LIBFFI_VER}.tar.gz"
-#GETTEXT_TARBALL="${GETTEXT_VER}.tar.gz"
 GLIB_TARBALL="${GLIB_VER}.tar.xz"
 PIXMAN_TARBALL="${PIXMAN_VER}.tar.gz"
 QEMU_TARBALL="${QEMU_VER}.tar.bz2"
 PKGCONFIGLITE_URL="http://sourceforge.net/projects/pkgconfiglite/files/`echo ${PKGCONFIGLITE_VER} | sed 's/pkg-config-lite-//g'`/${PKGCONFIGLITE_TARBALL}"
 LIBFFI_URL="ftp://sourceware.org/pub/libffi/${LIBFFI_TARBALL}"
-#GETTEXT_URL="http://mirrors.ustc.edu.cn/gnu/gettext/${GETTEXT_TARBALL}"
 GLIB_URL="http://mirrors.ustc.edu.cn/gnome/sources/glib/`echo ${GLIB_VER} | sed -e 's/glib-//g' -e 's/\.[^.]*$//g'`/${GLIB_TARBALL}"
 PIXMAN_URL="http://cairographics.org/releases/${PIXMAN_TARBALL}"
 QEMU_URL="http://wiki.qemu-project.org/download/${QEMU_TARBALL}"
-
-# tinylinux
+# source - tinylinux
 BUSYBOX_VER=busybox-1.24.1
 BASH_VER=bash-4.3.30
 BUSYBOX_TARBALL="${BUSYBOX_VER}.tar.bz2"
 BASH_TARBALL="${BASH_VER}.tar.gz"
 BUSYBOX_URL="http://busybox.net/downloads/${BUSYBOX_TARBALL}"
 BASH_URL="http://mirrors.ustc.edu.cn/gnu/bash/${BASH_TARBALL}"
+
+
+
+# flags
+MAKE_FLAGS=-j8
+
+# target
+TARGET=arm-unknown-linux-gnueabi
+LINUX_ARCH=arm
+QEMU_TARGET_LIST=arm-softmmu
+QEMU_CMDLINE="qemu-system-arm -M vexpress-a9 -m 256 -dtb ${LINUX_VER}/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -kernel ${LINUX_VER}/arch/arm/boot/zImage -initrd initramfs -serial stdio -append 'console=ttyAMA0 console=tty0'"
+
 
 # functions
 
@@ -168,23 +163,6 @@ function export_util_path()
 function export_lib_path()
 {
     export PATH="${LIB_PREFIX}/bin:${PATH}"
-}
-
-function gen_setpath_script()
-{
-	cat > "${PWD}/set_native_toolchain_path.sh" << EOF
-#!/bin/sh
-export PATH="${GCC_NATIVE_PREFIX}/bin:\${PATH}"
-EOF
-	cat > "${PWD}/set_cross_toolchain_path.sh" << EOF
-#!/bin/sh
-export PATH="${GCC_CROSS_PREFIX}/bin:\${PATH}"
-EOF
-	cat > "${PWD}/set_util_path.sh" << EOF
-#!/bin/sh
-export PATH="${UTIL_PREFIX}/bin:\${PATH}"
-EOF
-	chmod +x "${PWD}/set_native_toolchain_path.sh" "${PWD}/set_cross_toolchain_path.sh" "${PWD}/set_util_path.sh"
 }
 
 function save_path()

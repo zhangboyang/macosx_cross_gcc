@@ -31,9 +31,24 @@ function install_bash()
 {
     chdir_to "${TINYLINUX_SRC}/${BASH_VER}"
     make distclean
-    ./configure "--host=${TARGET}" && \
+    ./configure "--host=${TARGET}" --prefix=/ && \
     make ${MAKE_FLAGS} && \
     make "DESTDIR=${CROSS_SYSROOT}" install || fail "can't build bash"
+}
+
+function install_files()
+{
+    chdir_to "${CROSS_SYSROOT}"
+    ln -s bin/busybox init
+    
+    mkdir -p "${CROSS_SYSROOT}/etc/init.d"
+	cat > "${CROSS_SYSROOT}/etc/init.d/rcS" << EOF
+#!/bin/sh
+mount -t devtmpfs devtmpfs /dev
+mount -t proc proc /proc
+mount -t sys sys /sys
+EOF
+    chmod +x "${CROSS_SYSROOT}/etc/init.d/rcS"
 }
 
 chdir_to "${TINYLINUX_SRC}"
@@ -48,6 +63,7 @@ fix_elf_h
 build_kernel
 install_busybox
 install_bash
+install_files
 
 exit 0
 
