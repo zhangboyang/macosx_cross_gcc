@@ -3,6 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/common.sh"
 
 gen_setpath_script
+
 $DIR/wget.sh || fail "wget.sh failed"
 $DIR/download.sh || fail "download.sh failed"
 $DIR/util.sh || fail "util.sh failed"

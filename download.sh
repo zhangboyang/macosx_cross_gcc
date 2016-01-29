@@ -10,6 +10,7 @@ function download_util_files()
     download_file "${SED_URL}"
     download_file "${AWK_URL}"
     download_file "${XZ_URL}"
+    download_file "${FINDUTILS_URL}"
 }
 
 # toolchain
