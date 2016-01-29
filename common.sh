@@ -102,10 +102,16 @@ function chdir_to()
 	mkdir -p "$@" && cd "$@" || fail "can't chdir to $@"
 }
 
-function download_file()
+function download_file_by_curl()
 {
 	echo "download: $1"
 	curl -fLRO "$1" || fail "can't download $1"
+}
+
+function download_file()
+{
+	echo "download: $1"
+	wget -t 0 -c "$1" || fail "can't download $1"
 }
 
 function unpack_file()
