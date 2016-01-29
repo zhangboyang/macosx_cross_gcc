@@ -2,9 +2,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/common.sh"
 
-function export_lib_env()
+function export_lib_cflags()
 {
-    export PATH="${LIB_PREFIX}/bin:$PATH"
     export CFLAGS="-I${LIB_PREFIX}/include"
     export LDFLAGS="-L${LIB_PREFIX}/lib"
 }
@@ -17,7 +16,9 @@ unpack_file "${SRC}/${GLIB_TARBALL}"
 unpack_file "${SRC}/${PIXMAN_TARBALL}"
 unpack_file "${SRC}/${QEMU_TARBALL}"
 
-export_lib_env
+export_util_path
+export_lib_path
+export_lib_cflags
 standard_build "${QEMU_SRC}/${PKGCONFIGLITE_VER}" "${LIB_PREFIX}"
 standard_build "${QEMU_SRC}/${LIBFFI_VER}" "${LIB_PREFIX}"
 standard_build "${QEMU_SRC}/${GETTEXT_VER}" "${LIB_PREFIX}"

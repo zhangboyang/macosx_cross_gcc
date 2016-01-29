@@ -38,6 +38,7 @@ function download_qemu_files()
 }
 
 
+export_util_path
 download_util_files
 download_toolchain_files
 download_qemu_files

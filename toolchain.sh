@@ -172,7 +172,8 @@ ulimit -n 1024
 unpack_source
 
 # set PATH
-export_path
+export_toolchain_path
+export_util_path
 
 # build native tools
 build_native_part

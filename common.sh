@@ -24,6 +24,11 @@ LIB_PREFIX="${PWD}/libs"
 
 # source
 
+# wget
+WGET_VER=wget-1.17.1
+WGET_TARBALL="${WGET_VER}.tar.gz"
+WGET_URL="http://mirrors.ustc.edu.cn/gnu/wget/${WGET_TARBALL}"
+
 # util
 SED_VER=sed-4.2
 AWK_VER=gawk-4.1.3
@@ -119,7 +124,6 @@ function unpack_file()
 	echo "unpack: $@"
 	if [[ "$@" =~ \.xz$ ]]; then
 	    echo "xzcat: $@"
-	    set -o pipefail
 	    xzcat "$@" | tar x || fail "can't unpack $@"
 	else
 	    tar xf "$@" || fail "can't unpack $@"
@@ -133,11 +137,20 @@ function standard_build()
 	./configure "--prefix=$2" $3 && make ${MAKE_FLAGS} && make install || fail "can't build in $1"
 }
 
-function export_path()
+function export_toolchain_path()
 {
 	export PATH="${GCC_NATIVE_PREFIX}/bin:${PATH}"
 	export PATH="${GCC_CROSS_PREFIX}/bin:${PATH}"
+}
+
+function export_util_path()
+{
 	export PATH="${UTIL_PREFIX}/bin:${PATH}"
+}
+
+function export_lib_path()
+{
+    export PATH="${LIB_PREFIX}/bin:${PATH}"
 }
 
 function gen_setpath_script()
@@ -150,4 +163,6 @@ export PATH="${UTIL_PREFIX}/bin:\${PATH}"
 EOF
 	chmod +x "${PWD}/setpath.sh"
 }
+
+set -o pipefail
 

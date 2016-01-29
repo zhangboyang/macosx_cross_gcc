@@ -2,10 +2,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/common.sh"
 
-chdir_to "${UTIL_SRC}"
+chdir_to "${SRC}"
 download_file_by_curl "${WGET_URL}"
+chdir_to "${UTIL_SRC}"
 unpack_file "${SRC}/${WGET_TARBALL}"
-standard_build "${UTIL_SRC}/${WGET_VER}" "${UTIL_PREFIX}"
+standard_build "${UTIL_SRC}/${WGET_VER}" "${UTIL_PREFIX}" "--without-ssl"
 
 exit 0
 
