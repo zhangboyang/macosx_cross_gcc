@@ -4,7 +4,7 @@ source "$DIR/common.sh"
 
 function gen_setpath_script()
 {
-    cat > "${PREFIX}/set_native_toolchain_path.sh" << EOF
+    cat > "${PREFIX}/set_native_gcc_path.sh" << EOF
 #!/bin/sh
 export PATH="${GCC_NATIVE_PREFIX}/bin:\${PATH}"
 PS1="[NATIVE] \$PS1"
@@ -19,7 +19,7 @@ EOF
 export PATH="${UTIL_PREFIX}/bin:\${PATH}"
 PS1="[UTIL] \$PS1"
 EOF
-    chmod +x "${PREFIX}/set_native_toolchain_path.sh" "${PREFIX}/set_cross_toolchain_path.sh" "${PREFIX}/set_util_path.sh"
+    chmod +x "${PREFIX}/set_native_gcc_path.sh" "${PREFIX}/set_cross_toolchain_path.sh" "${PREFIX}/set_util_path.sh"
 }
 
 function gen_qemu_script()
