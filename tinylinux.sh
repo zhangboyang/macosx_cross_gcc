@@ -53,6 +53,12 @@ EOF
     chmod +x "${SYSROOT}/etc/init.d/rcS"
 }
 
+function generate_initramfs()
+{
+    chdir_to "${SYSROOT}"
+    find . | cpio -H newc -o | gzip > "${TINYLINUX_SRC}/initramfs"
+}
+
 chdir_to "${TINYLINUX_SRC}"
 unpack_file "${SRC}/${LINUX_TARBALL}"
 unpack_file "${SRC}/${BUSYBOX_TARBALL}"
@@ -66,6 +72,7 @@ build_kernel
 install_busybox
 install_bash
 install_files
+generate_initramfs
 
 exit 0
 

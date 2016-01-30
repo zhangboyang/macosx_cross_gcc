@@ -128,6 +128,8 @@ function build_cross_gcc_final()
         --enable-libstdcxx-time && \
     make ${MAKE_FLAGS} && \
     make install || fail "can't build cross-gcc-final"
+    mkdir -p "${SYSROOT}/usr" && \
+    cp -r "${GCC_CROSS_PREFIX}/${TARGET}/lib" "${GCC_CROSS_PREFIX}/${TARGET}/include" "${SYSROOT}/usr" || fail "can't install libstdc++"
 }
 
 function install_linux_headers()

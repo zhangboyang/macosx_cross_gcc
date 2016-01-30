@@ -99,7 +99,7 @@ MAKE_FLAGS=-j8
 TARGET=arm-unknown-linux-gnueabi
 LINUX_ARCH=arm
 QEMU_TARGET_LIST=arm-softmmu
-QEMU_CMDLINE="qemu-system-arm -M vexpress-a9 -m 256 -dtb ${LINUX_VER}/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -kernel ${LINUX_VER}/arch/arm/boot/zImage -initrd initramfs -serial stdio -append 'console=ttyAMA0 console=tty0'"
+QEMU_CMDLINE="qemu-system-arm -M vexpress-a9 -m 1024 -dtb ${LINUX_VER}/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -kernel ${LINUX_VER}/arch/arm/boot/zImage -initrd initramfs -serial stdio -append 'console=ttyAMA0 console=tty0'"
 
 
 # functions
