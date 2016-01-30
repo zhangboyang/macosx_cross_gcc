@@ -40,9 +40,11 @@ function install_files()
 {
     chdir_to "${CROSS_SYSROOT}"
     ln -s bin/busybox init
-    
+    mkdir -p "${CROSS_SYSROOT}/dev"
+    mkdir -p "${CROSS_SYSROOT}/proc"
+    mkdir -p "${CROSS_SYSROOT}/sys"
     mkdir -p "${CROSS_SYSROOT}/etc/init.d"
-	cat > "${CROSS_SYSROOT}/etc/init.d/rcS" << EOF
+    cat > "${CROSS_SYSROOT}/etc/init.d/rcS" << EOF
 #!/bin/sh
 mount -t devtmpfs devtmpfs /dev
 mount -t proc proc /proc

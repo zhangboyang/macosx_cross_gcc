@@ -106,58 +106,58 @@ QEMU_CMDLINE="qemu-system-arm -M vexpress-a9 -m 256 -dtb ${LINUX_VER}/arch/arm/b
 
 function fail()
 {
-	echo "fail: $@"
-	exit 1
+    echo "fail: $@"
+    exit 1
 }
 
 function chdir_to()
 {
-	mkdir -p "$@" && cd "$@" || fail "can't chdir to $@"
+    mkdir -p "$@" && cd "$@" || fail "can't chdir to $@"
 }
 
 function download_file_by_curl()
 {
-	echo "download: $1"
-	curl -fLRO "$1" || fail "can't download $1"
+    echo "download: $1"
+    curl -fLRO "$1" || fail "can't download $1"
 }
 
 function download_file()
 {
-	echo "download: $1"
-	wget -t 0 -c "$1" || fail "can't download $1"
+    echo "download: $1"
+    wget -t 0 -c "$1" || fail "can't download $1"
 }
 
 function unpack_file()
 {
-	echo "unpack: $@"
-	if [[ "$@" =~ \.xz$ ]]; then
-	    echo "xzcat: $@"
-	    xzcat "$@" | tar x || fail "can't unpack $@"
-	else
-	    tar xf "$@" || fail "can't unpack $@"
-	fi
+    echo "unpack: $@"
+    if [[ "$@" =~ \.xz$ ]]; then
+        echo "xzcat: $@"
+        xzcat "$@" | tar x || fail "can't unpack $@"
+    else
+        tar xf "$@" || fail "can't unpack $@"
+    fi
 }
 
 function standard_build()
 {
-	chdir_to "$1"
-	make distclean
-	./configure "--prefix=$2" $3 && make ${MAKE_FLAGS} && make install || fail "can't build in $1"
+    chdir_to "$1"
+    make distclean
+    ./configure "--prefix=$2" $3 && make ${MAKE_FLAGS} && make install || fail "can't build in $1"
 }
 
 function export_native_gcc_path()
 {
-	export PATH="${GCC_NATIVE_PREFIX}/bin:${PATH}"
+    export PATH="${GCC_NATIVE_PREFIX}/bin:${PATH}"
 }
 
 function export_cross_toolchain_path()
 {
-	export PATH="${GCC_CROSS_PREFIX}/bin:${PATH}"
+    export PATH="${GCC_CROSS_PREFIX}/bin:${PATH}"
 }
 
 function export_util_path()
 {
-	export PATH="${UTIL_PREFIX}/bin:${PATH}"
+    export PATH="${UTIL_PREFIX}/bin:${PATH}"
 }
 
 function export_lib_path()
