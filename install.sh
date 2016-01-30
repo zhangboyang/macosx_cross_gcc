@@ -12,6 +12,7 @@ EOF
     cat > "${PREFIX}/set_cross_toolchain_path.sh" << EOF
 #!/bin/sh
 export PATH="${GCC_CROSS_PREFIX}/bin:\${PATH}"
+export SYSROOT="${SYSROOT}"
 PS1="[CROSS] \$PS1"
 EOF
     cat > "${PREFIX}/set_util_path.sh" << EOF
@@ -32,7 +33,7 @@ ${QEMU_CMDLINE}
 EOF
     cat > "${PREFIX}/gen_initramfs.sh" << EOF
 #!/bin/sh
-cd "${CROSS_SYSROOT}" && \
+cd "${SYSROOT}" && \
 find . | cpio -H newc -o | gzip > ${TINYLINUX_SRC}/initramfs
 EOF
     chmod +x "${PREFIX}/run_qemu.sh" "${PREFIX}/gen_initramfs.sh"
@@ -49,8 +50,8 @@ $DIR/toolchain.sh || fail "toolchain.sh failed"
 $DIR/qemu.sh || fail "qemu.sh failed"
 $DIR/tinylinux.sh || fail "tinylinux.sh failed"
 
-echo "backup sysroot: ${CROSS_SYSROOT}"
-tar cf sysroot-backup.tar ${CROSS_SYSROOT}
+echo "backup sysroot: ${SYSROOT}"
+tar cf sysroot-backup.tar ${SYSROOT}
 
 echo "all finished."
 

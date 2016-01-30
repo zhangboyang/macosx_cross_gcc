@@ -12,7 +12,7 @@ CROSS_SRC="${TOOLCHAIN_SRC}/cross"
 QEMU_SRC="${SRC}/qemu"
 TINYLINUX_SRC="${SRC}/tinylinux"
 
-CROSS_SYSROOT="${PREFIX}/sysroot"
+SYSROOT="${PREFIX}/sysroot"
 
 GCC_NATIVE_PREFIX="${PREFIX}/gcc-native"
 GCC_CROSS_PREFIX="${PREFIX}/gcc-cross"

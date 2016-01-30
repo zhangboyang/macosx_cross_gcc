@@ -4,7 +4,7 @@ source "$DIR/common.sh"
 
 function fix_elf_h()
 {
-    cat "${CROSS_SYSROOT}/usr/include/elf.h" | sed -e '/features\.h/d' -e '/__BEGIN_DECLS/d' -e '/__END_DECLS/d' > "${GCC_NATIVE_PREFIX}/include/elf.h"
+    cat "${SYSROOT}/usr/include/elf.h" | sed -e '/features\.h/d' -e '/__BEGIN_DECLS/d' -e '/__END_DECLS/d' > "${GCC_NATIVE_PREFIX}/include/elf.h"
 }
 
 function build_kernel()
@@ -24,7 +24,7 @@ function install_busybox()
     make distclean
     make "CROSS_COMPILE=${TARGET}-" defconfig && \
     make "CROSS_COMPILE=${TARGET}-" ${MAKE_FLAGS} && \
-    make "CROSS_COMPILE=${TARGET}-" "CONFIG_PREFIX=${CROSS_SYSROOT}" install || fail "can't build busybox"
+    make "CROSS_COMPILE=${TARGET}-" "CONFIG_PREFIX=${SYSROOT}" install || fail "can't build busybox"
 }
 
 function install_bash()
@@ -33,24 +33,24 @@ function install_bash()
     make distclean
     ./configure "--host=${TARGET}" --prefix=/ && \
     make ${MAKE_FLAGS} && \
-    make "DESTDIR=${CROSS_SYSROOT}" install || fail "can't build bash"
+    make "DESTDIR=${SYSROOT}" install || fail "can't build bash"
 }
 
 function install_files()
 {
-    chdir_to "${CROSS_SYSROOT}"
+    chdir_to "${SYSROOT}"
     ln -s bin/busybox init
-    mkdir -p "${CROSS_SYSROOT}/dev"
-    mkdir -p "${CROSS_SYSROOT}/proc"
-    mkdir -p "${CROSS_SYSROOT}/sys"
-    mkdir -p "${CROSS_SYSROOT}/etc/init.d"
-    cat > "${CROSS_SYSROOT}/etc/init.d/rcS" << EOF
+    mkdir -p "${SYSROOT}/dev"
+    mkdir -p "${SYSROOT}/proc"
+    mkdir -p "${SYSROOT}/sys"
+    mkdir -p "${SYSROOT}/etc/init.d"
+    cat > "${SYSROOT}/etc/init.d/rcS" << EOF
 #!/bin/sh
 mount -t devtmpfs devtmpfs /dev
 mount -t proc proc /proc
 mount -t sys sys /sys
 EOF
-    chmod +x "${CROSS_SYSROOT}/etc/init.d/rcS"
+    chmod +x "${SYSROOT}/etc/init.d/rcS"
 }
 
 chdir_to "${TINYLINUX_SRC}"

@@ -69,7 +69,7 @@ function build_cross_binutils()
 {
     chdir_to "${CROSS_SRC}/${BINUTILS_VER}-build"
     make distclean
-    "${CROSS_SRC}/${BINUTILS_VER}/configure" "--prefix=${GCC_CROSS_PREFIX}" "--target=${TARGET}" "--with-sysroot=${CROSS_SYSROOT}" && make ${MAKE_FLAGS} && make install || fail "can't build cross-binutils"
+    "${CROSS_SRC}/${BINUTILS_VER}/configure" "--prefix=${GCC_CROSS_PREFIX}" "--target=${TARGET}" "--with-sysroot=${SYSROOT}" && make ${MAKE_FLAGS} && make install || fail "can't build cross-binutils"
 }
 
 function build_cross_gcc()
@@ -84,7 +84,7 @@ function build_cross_gcc()
     "${CROSS_SRC}/${GCC_VER}/configure" \
         "--prefix=${GCC_CROSS_PREFIX}" \
         "--target=${TARGET}" \
-        "--with-sysroot=${CROSS_SYSROOT}" \
+        "--with-sysroot=${SYSROOT}" \
         --enable-languages=c,c++ \
         --with-newlib \
         --disable-threads \
@@ -104,9 +104,9 @@ function build_cross_glibc()
     BUILD_CC="gcc ${LIBINTL}" "${CROSS_SRC}/${GLIBC_VER}/configure" \
         --prefix=/usr \
         "--host=${TARGET}" \
-        "--with-headers=${CROSS_SYSROOT}/usr/include" \
+        "--with-headers=${SYSROOT}/usr/include" \
         --enable-obsolete-rpc && \
-    make ${MAKE_FLAGS} && make "install_root=${CROSS_SYSROOT}" "DESTDIR={SYSROOT}" install || fail "can't build cross-glibc"
+    make ${MAKE_FLAGS} && make "install_root=${SYSROOT}" "DESTDIR=${SYSROOT}" install || fail "can't build cross-glibc"
 }
 
 function build_cross_gcc_final()
@@ -121,7 +121,7 @@ function build_cross_gcc_final()
     "${CROSS_SRC}/${GCC_VER}-final/${GCC_VER}/configure" \
         "--prefix=${GCC_CROSS_PREFIX}" \
         "--target=${TARGET}" \
-        "--with-sysroot=${CROSS_SYSROOT}" \
+        "--with-sysroot=${SYSROOT}" \
         --enable-languages=c,c++ \
         --enable-__cxa_atexit \
         --enable-threads=posix \
@@ -133,7 +133,7 @@ function build_cross_gcc_final()
 function install_linux_headers()
 {
     chdir_to "${CROSS_SRC}/${LINUX_VER}"
-    make "ARCH=${LINUX_ARCH}" "INSTALL_HDR_PATH=${CROSS_SYSROOT}/usr" headers_install || fail "can't install linux-headers"
+    make "ARCH=${LINUX_ARCH}" "INSTALL_HDR_PATH=${SYSROOT}/usr" headers_install || fail "can't install linux-headers"
 }
 
 function build_native_part()
