@@ -77,11 +77,12 @@ EOF
 
 function gen_maxosx_app()
 {
-    cat > "${PREFIX}/CrossToolsLauncher.app" << EOF
+    mkdir -p "${PREFIX}/CrossToolsLauncher.app/Contents/MacOS"
+    cat > "${PREFIX}/CrossToolsLauncher.app/Contents/MacOS/CrossToolsLauncher" << EOF
 #!/bin/bash
 open -a Terminal "${SCRIPT_PREFIX}/cross_environment.sh"
 EOF
-    chmod +x "${PREFIX}/CrossToolsLauncher.app"
+    chmod +x "${PREFIX}/CrossToolsLauncher.app/Contents/MacOS/CrossToolsLauncher"
 }
 
 mkdir -p "${SCRIPT_PREFIX}"
