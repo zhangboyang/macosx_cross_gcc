@@ -18,7 +18,7 @@ GCC_NATIVE_PREFIX="${PREFIX}/gcc-native"
 GCC_CROSS_PREFIX="${PREFIX}/gcc-cross"
 UTIL_PREFIX="${PREFIX}/utils"
 LIB_PREFIX="${PREFIX}/libs"
-
+SCRIPT_PREFIX="${PREFIX}/scripts"
 
 # source - wget
 WGET_VER=wget-1.17.1
