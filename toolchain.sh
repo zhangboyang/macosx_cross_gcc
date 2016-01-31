@@ -89,7 +89,8 @@ function build_cross_gcc()
         --with-newlib \
         --disable-threads \
         --disable-shared \
-        --without-headers && \
+        --without-headers \
+        ${CROSSGCC_EXTRA_CONFIGURE} && \
     make ${MAKE_FLAGS} all-gcc all-target-libgcc && \
     make install-gcc install-target-libgcc || fail "can't build cross-gcc"
 }
@@ -125,7 +126,8 @@ function build_cross_gcc_final()
         --enable-languages=c,c++ \
         --enable-__cxa_atexit \
         --enable-threads=posix \
-        --enable-libstdcxx-time && \
+        --enable-libstdcxx-time \
+        ${CROSSGCC_EXTRA_CONFIGURE} && \
     make ${MAKE_FLAGS} && \
     make install || fail "can't build cross-gcc-final"
     mkdir -p "${SYSROOT}/usr" && \
