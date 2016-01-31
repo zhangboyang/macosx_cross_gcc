@@ -10,7 +10,7 @@ function export_lib_cflags()
 
 export_util_path
 chdir_to "${QEMU_SRC}"
-unpack_file "${SRC}/${PKGCONFIGLITE_TARBALL}"
+${LIB_PREFIX}/bin/pkg-config --version || unpack_file "${SRC}/${PKGCONFIGLITE_TARBALL}"
 unpack_file "${SRC}/${LIBFFI_TARBALL}"
 unpack_file "${SRC}/${GETTEXT_TARBALL}"
 unpack_file "${SRC}/${GLIB_TARBALL}"
@@ -19,7 +19,7 @@ unpack_file "${SRC}/${QEMU_TARBALL}"
 
 export_lib_path
 export_lib_cflags
-standard_build "${QEMU_SRC}/${PKGCONFIGLITE_VER}" "${LIB_PREFIX}"
+${LIB_PREFIX}/bin/pkg-config --version || standard_build "${QEMU_SRC}/${PKGCONFIGLITE_VER}" "${LIB_PREFIX}"
 standard_build "${QEMU_SRC}/${LIBFFI_VER}" "${LIB_PREFIX}"
 standard_build "${QEMU_SRC}/${GETTEXT_VER}" "${LIB_PREFIX}"
 standard_build "${QEMU_SRC}/${GLIB_VER}" "${LIB_PREFIX}" "--with-pcre=internal"
