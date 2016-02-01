@@ -35,6 +35,7 @@ scripts to make cross compile toolchain on apple mac os x
            脚本的路径/install.sh
 
     4. 脚本下载并编译所需的程序大约需要 5 个小时
+       执行过程中可能会有 "未安装 javac" 的提示弹出，关闭即可
        全部执行完毕后脚本会显示 "all finished."
 
 使用说明：
