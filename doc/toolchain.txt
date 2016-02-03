@@ -1,0 +1,33 @@
+toolchain.sh 是所有脚本中最重要的一个，负责编译安装工具链。
+
+编译交叉工具链的步骤：
+
+    (1) 编译原生 (native) 工具链，对应函数是 build_native_part
+        build_native_gcc
+            在 Mac OS X 上，系统自带的编译器是 Clang。由于 GCC 的特殊性，GCC 只能由 GCC
+            来编译，因此，先需要用 Clang 编译一个原生的 GCC 出来，再用这个 GCC 编译我们最终
+            需要的 GCC。
+
+        build_native_sed
+        build_native_awk
+        build_native_gettext
+            除了 GCC 之外，编译 glibc 还需要用到一些 GNU 版本的命令行工具 (sed, awk) 和
+            一些库 (gettext)，因此还需要编译并安装它们。
+
+    (2) 编译交叉 (cross) 工具链
+        这一部分主要参考的是 CLFS 教程：
+            http://clfs.org/view/CLFS-3.0.0-SYSVINIT/x86_64/cross-tools/chapter.html
+        我的大部分命令都是参考 CLFS 来做的，但是顺序和细节有微小改动。
+        主要步骤：
+            编译 binutils (build_cross_binutils)
+                binutils 是二进制工具，包含汇编器、链接器等，是最基础的工具。
+            编译 GCC 临时版本 (build_cross_gcc)
+                由于没有 libc 我们并不能编译一个完整的 GCC 出来，但是编译一个 glibc 又需要
+                GCC 编译器，因此需要先编译一个小型、功能简单的 GCC 出来。
+            安装 Linux 内核头文件 (install_linux_headers)
+                编译 glibc 需要 Linux 内核头文件。
+            编译 glibc (build_cross_glibc)
+                有了 GCC 和 Linux 内核头文件，就可以编译 glibc 了。
+            编译 GCC 最终版本 (build_cross_gcc_final)
+                有了 glibc 就可以编译最终的、完整的 GCC 出来了。
+
